@@ -96,6 +96,19 @@ hr::after { content: '⁂'; color: var(--mute); }
 
 img { max-width: 100%; height: auto; }
 
+/* figures: hand-drawn SVG diagrams in posts */
+.fig { margin: 36px 0; overflow-x: auto; }
+.fig svg { display: block; width: 100%; min-width: 560px; height: auto; }
+.fig text { font: 400 12.5px var(--sans); fill: var(--fg); }
+.fig text.m { fill: var(--mute); }
+.fig text.s { font-size: 11px; }
+.fig rect { fill: none; stroke: var(--fg); stroke-width: 1; }
+.fig rect.f { fill: var(--code-bg); }
+.fig rect.d { stroke: var(--mute); stroke-dasharray: 4 3; }
+.fig path { fill: none; stroke: var(--mute); stroke-width: 1; }
+.fig path.ah { fill: var(--mute); stroke: none; }
+.fig figcaption { font: 400 13px/1.5 var(--sans); color: var(--mute); margin-top: 10px; }
+
 @media (max-width: 560px) {
 	body { font-size: 18.5px; }
 	.wrap { padding-top: 64px; }
