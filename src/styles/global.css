@@ -1,0 +1,102 @@
+@import '@fontsource-variable/newsreader/opsz.css';
+@import '@fontsource-variable/newsreader/opsz-italic.css';
+@import '@fontsource-variable/jetbrains-mono/wght.css';
+
+:root {
+	--bg: #fbf9f4;
+	--fg: #26241f;
+	--mute: #8a857a;
+	--rule: #e8e3d8;
+	--link: #a9a294;
+	--code-bg: rgba(38, 36, 31, 0.055);
+	--serif: 'Newsreader Variable', 'Songti SC', 'Noto Serif CJK SC', Georgia, serif;
+	--sans: -apple-system, 'Helvetica Neue', 'PingFang SC', sans-serif;
+	--mono: 'JetBrains Mono Variable', ui-monospace, Menlo, monospace;
+	color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--bg: #161513;
+		--fg: #e4e0d6;
+		--mute: #8f897d;
+		--rule: #2d2a25;
+		--link: #6f695e;
+		--code-bg: rgba(228, 224, 214, 0.08);
+	}
+}
+
+* { box-sizing: border-box; }
+html { overflow-x: clip; background: var(--bg); }
+
+body {
+	margin: 0;
+	background: var(--bg);
+	color: var(--fg);
+	font: 350 20px/1.7 var(--serif);
+	font-optical-sizing: auto;
+	-webkit-font-smoothing: antialiased;
+	text-rendering: optimizeLegibility;
+}
+
+.wrap { max-width: calc(65ch + 44px); margin: 0 auto; padding: 104px 22px 120px; }
+
+a {
+	color: inherit;
+	text-decoration: underline;
+	text-decoration-thickness: 1px;
+	text-underline-offset: 4px;
+	text-decoration-color: var(--link);
+}
+a:hover { text-decoration-color: var(--fg); }
+
+p { margin: 0 0 18px; }
+h1, h2, h3 { text-wrap: balance; }
+strong { font-weight: 550; }
+
+.small {
+	font: 400 13px/1.5 var(--sans);
+	color: var(--mute);
+	letter-spacing: 0.01em;
+}
+
+code {
+	font: 400 0.78em var(--mono);
+	background: var(--code-bg);
+	padding: 0.12em 0.32em;
+	border-radius: 3px;
+}
+pre {
+	font: 400 13.5px/1.65 var(--mono);
+	margin: 24px 0;
+	padding: 4px 0 4px 18px;
+	border-left: 1px solid var(--rule);
+	overflow-x: auto;
+	background: none !important;
+}
+pre code { background: none; padding: 0; font-size: inherit; }
+@media (prefers-color-scheme: dark) {
+	.astro-code, .astro-code span { color: var(--shiki-dark) !important; }
+}
+
+blockquote {
+	margin: 24px 0;
+	padding-left: 18px;
+	border-left: 1px solid var(--rule);
+	color: var(--mute);
+	font-style: italic;
+}
+
+table { width: 100%; border-collapse: collapse; margin: 24px 0; font-size: 17px; display: block; overflow-x: auto; }
+th, td { text-align: left; vertical-align: top; padding: 6px 14px 6px 0; border-bottom: 1px solid var(--rule); }
+th { font-weight: 500; }
+
+hr { border: 0; margin: 56px 0; text-align: center; }
+hr::after { content: '⁂'; color: var(--mute); }
+
+img { max-width: 100%; height: auto; }
+
+@media (max-width: 560px) {
+	body { font-size: 18.5px; }
+	.wrap { padding-top: 64px; }
+}

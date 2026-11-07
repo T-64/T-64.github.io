@@ -1,0 +1,47 @@
+---
+import { render } from 'astro:content';
+import BaseHead from '../../components/BaseHead.astro';
+import { getPosts, type Post } from '../../posts';
+
+export async function getStaticPaths() {
+	const posts = await getPosts();
+	return posts.map((post) => ({ params: { slug: post.id }, props: post }));
+}
+type Props = Post;
+
+const post = Astro.props;
+const { title, description, pubDate, updatedDate } = post.data;
+const { Content } = await render(post);
+const day = (d: Date) => d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+---
+
+<html lang="en">
+	<head>
+		<BaseHead title={`${title} — Zhaoqing Tan`} description={description} type="article" />
+		<style>
+			.home { display: inline-block; margin-bottom: 64px; text-decoration: none; }
+			.home:hover { color: var(--fg); }
+			.meta { display: block; margin-bottom: 10px; }
+			h1 { font-size: 34px; line-height: 1.2; font-weight: 400; letter-spacing: -0.005em; margin: 0 0 44px; }
+			article :global(h2) { font-size: inherit; font-weight: 500; margin: 48px 0 6px; }
+			article :global(h3) { font-size: inherit; font-weight: 400; font-style: italic; margin: 32px 0 4px; }
+			article :global(ul), article :global(ol) { padding-left: 1.2em; margin: 0 0 18px; }
+			article :global(li) { margin-bottom: 4px; }
+			.end { margin-top: 80px; }
+			@media (max-width: 560px) { h1 { font-size: 28px; } }
+		</style>
+	</head>
+	<body>
+		<main class="wrap">
+			<a class="home small" href="/">Zhaoqing Tan</a>
+			<article>
+				<span class="meta small">
+					{day(pubDate)}{updatedDate && <> · updated {day(updatedDate)}</>}{post.isDraft && <> · draft</>}
+				</span>
+				<h1>{title}</h1>
+				<Content />
+			</article>
+			<p class="end small"><a href="/">← All writing</a></p>
+		</main>
+	</body>
+</html>

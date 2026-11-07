@@ -1,0 +1,25 @@
+# build output
+dist/
+# generated types
+.astro/
+
+# dependencies
+node_modules/
+
+# logs
+npm-debug.log*
+
+# environment variables
+.env
+.env.production
+
+# macOS-specific files
+.DS_Store
+
+# editor
+.idea/
+
+# 草稿永远不进 Git（发布 = 把文件从 drafts/ 移到 blog/）
+src/content/drafts/
+# 设计样稿
+_mockups/

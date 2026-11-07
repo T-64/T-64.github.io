@@ -1,0 +1,53 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import { LINKS, SIGNATURE, SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+import { Content as Intro } from '../copy/intro.md';
+import { getPosts } from '../posts';
+
+const posts = await getPosts();
+const links = LINKS.filter((l) => l.href);
+const month = (d: Date) => d.toLocaleDateString('en-GB', { month: 'short', year: 'numeric' });
+---
+
+<html lang="en">
+	<head>
+		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+		<style>
+			.name { font-weight: 450; margin: 0 0 30px; }
+			.links { margin: 26px 0 0; }
+			.links a + a { margin-left: 1.1em; }
+			h2 { font-size: inherit; font-weight: 300; font-style: italic; margin: 72px 0 12px; color: var(--mute); }
+			ul { list-style: none; margin: 0; padding: 0; }
+			li { display: flex; justify-content: space-between; align-items: baseline; gap: 20px; padding: 4px 0; }
+			li .small { white-space: nowrap; }
+			.draft { font: 400 11px var(--sans); color: var(--mute); border: 1px solid var(--rule); padding: 0 4px; margin-left: 6px; vertical-align: 2px; }
+			.empty { color: var(--mute); }
+			.sign { margin-top: 88px; }
+		</style>
+	</head>
+	<body>
+		<main class="wrap">
+			<p class="name">Zhaoqing Tan</p>
+			<Intro />
+			<p class="links">{links.map((l) => <a href={l.href}>{l.label}</a>)}</p>
+
+			<h2>Writing</h2>
+			{posts.length === 0 && <p class="empty">Nothing yet. Soon.</p>}
+			<ul>
+				{
+					posts.map((post) => (
+						<li>
+							<span>
+								<a href={`/blog/${post.id}/`}>{post.data.title}</a>
+								{post.isDraft && <span class="draft">draft</span>}
+							</span>
+							<span class="small">{month(post.data.pubDate)}</span>
+						</li>
+					))
+				}
+			</ul>
+
+			<p class="sign small">{SIGNATURE}</p>
+		</main>
+	</body>
+</html>
