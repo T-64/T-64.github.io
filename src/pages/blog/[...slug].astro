@@ -11,7 +11,8 @@ type Props = Post;
 
 const post = Astro.props;
 const { title, description, pubDate, updatedDate } = post.data;
-const { Content } = await render(post);
+const { Content, headings } = await render(post);
+const toc = headings.filter((h) => h.depth === 2);
 const day = (d: Date) => d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
 ---
 
@@ -29,6 +30,24 @@ const day = (d: Date) => d.toLocaleDateString('en-GB', { day: 'numeric', month: 
 			article :global(li) { margin-bottom: 4px; }
 			.end { margin-top: 80px; }
 			@media (max-width: 560px) { h1 { font-size: 28px; } }
+
+			/* contents: only on wide screens, in the margin to the right of the text */
+			article { position: relative; }
+			article :global(h2) { scroll-margin-top: 32px; }
+			.toc { display: none; }
+			@media (min-width: 1180px) {
+				.toc { display: block; position: absolute; top: 0; bottom: 0; left: calc(100% + 56px); width: 200px; }
+				.toc nav { position: sticky; top: 104px; }
+				.toc ol { list-style: none; margin: 0; padding: 0; border-left: 1px solid var(--rule); }
+				.toc li { margin: 0; }
+				.toc a {
+					display: block; padding: 4px 0 4px 14px; margin-left: -1px; border-left: 1px solid transparent;
+					text-decoration: none; color: var(--mute); text-wrap: pretty;
+					transition: color 0.15s, border-color 0.15s;
+				}
+				.toc a:hover { color: var(--fg); }
+				.toc a.on { color: var(--fg); border-left-color: var(--fg); }
+			}
 		</style>
 	</head>
 	<body>
@@ -40,7 +59,25 @@ const day = (d: Date) => d.toLocaleDateString('en-GB', { day: 'numeric', month: 
 				</span>
 				<h1>{title}</h1>
 				<Content />
+				{toc.length >= 3 && (
+					<aside class="toc small" aria-label="Contents">
+						<nav>
+							<ol>{toc.map((h) => <li><a href={`#${h.slug}`}>{h.text}</a></li>)}</ol>
+						</nav>
+					</aside>
+				)}
 			</article>
+			<script>
+				// highlight the section being read
+				const links = [...document.querySelectorAll<HTMLAnchorElement>('.toc a')];
+				const heads = links.map((a) => document.getElementById(decodeURIComponent(a.hash.slice(1)))).filter(Boolean) as HTMLElement[];
+				const update = () => {
+					let i = 0;
+					heads.forEach((h, j) => { if (h.getBoundingClientRect().top < window.innerHeight * 0.3) i = j; });
+					links.forEach((a, j) => a.classList.toggle('on', j === i));
+				};
+				if (heads.length) { addEventListener('scroll', update, { passive: true }); update(); }
+			</script>
 			<p class="end small"><a href="/">← All writing</a></p>
 		</main>
 	</body>
